@@ -37,14 +37,10 @@ updateMonitor();
 var tone = {frequency: 440};
 function myOnPress(ch, physicalKey){
 	//console.log(ch, physicalKey);
-	const key = keyboard.key(ch);
-	if(key){
-		tone.frequency = Math.pow(2, synth.settings.octave + synth.settings.transposition / 12) * key.frequency;
-		//procs.forEach(proc => proc.kill());
-		//console.log(ch);
-		synth.play(tone);
-		//console.log(key.name);
-		//console.log('play');
+
+	const frequency = keyboard.frequency(ch);
+	if(frequency){
+		synth.playFrequency(frequency);
 	}
 	else if(ch === ' '){
 		synth.nextSound();
@@ -69,6 +65,6 @@ function updateMonitor(){
 	process.stdout.clearLine();  // clear current text
 	process.stdout.cursorTo(0);  // move cursor to beginning of line
 	var settings = synth.settings;
-	process.stdout.write('sound:'+synth.sound() + ' octave:'+settings.octave + ' transposition:' + settings.transposition);  // write text
+	process.stdout.write('sound:'+synth.sound() + ' octave:'+settings.octave + ' transposition:' + settings.transposition+' ');  // write text
 }
 

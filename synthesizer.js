@@ -20,9 +20,11 @@ Synthesizer.prototype.SOUNDS = ['sin', 'tri', 'squ', 'pluck'];
 	Outputs the provided tone as sound with the current synth settings
 	@param tone object with a defined frequency to play
 */
-Synthesizer.prototype.play = function(tone) {
+Synthesizer.prototype.playFrequency = function(frequency) {
+	frequency *= Math.pow(2, this.settings.octave + this.settings.transposition / 12);
+	const overtone = Math.pow(2,7/12)*frequency;
 	const sound = Synthesizer.prototype.SOUNDS[this.settings.current_sound];
-	const playCmd = `play -nq synth ${sound} ${tone.frequency} ${sound} ${Math.pow(2,7/12)*tone.frequency} fade ${this.settings.fadein} ${this.settings.duration} ${this.settings.fadeout} reverb `;
+	const playCmd = `play -nq synth ${sound} ${frequency} ${sound} ${overtone} fade ${this.settings.fadein} ${this.settings.duration} ${this.settings.fadeout} reverb `;
 	//console.log(playCmd);
 	var subproc = exec(playCmd, (error, stdout, stderr) => {
 	  if (error) {

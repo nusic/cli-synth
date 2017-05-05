@@ -20,10 +20,20 @@ function Keyboard(keyboardChars, locationStandardA){
 	this.keyboardChars = keyboardChars;
 	this.locationStandardA = locationStandardA;
 	this.charToKeyMap = buildKeyFreqMap(keyboardChars, locationStandardA);
+	var self = this;
+	this.charToFrequency = Object.keys(this.charToKeyMap)
+		.reduce((charToFreq, ch) => {
+			charToFreq[ch] = self.charToKeyMap[ch].frequency;
+			return charToFreq;
+		}, {});
 }
 
 Keyboard.prototype.key = function(ch) {
 	return this.charToKeyMap[ch];
+};
+
+Keyboard.prototype.frequency = function(ch) {
+	return this.charToFrequency[ch];
 };
 
 Keyboard.prototype.charIndexIsBlackKey = function(charIndex) {
