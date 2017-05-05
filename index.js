@@ -5,11 +5,10 @@ var Keyboard = require('./keyboard');
 var keyboard = new Keyboard('awsedftgyhujkolpöä', 9);
 //var keyboard = new Keyboard('q2w3er5t6y7ucfvgbnjmk,l.', 9);
 
-console.log(keyboard.toString());
-
 var procs = [];
 process.on('exit', () => {
 	procs.forEach(proc => proc.kill());
+	console.log();
 })
 
 // make `process.stdin` begin emitting "keypress" events 
@@ -51,6 +50,8 @@ var tone = {
 	frequency: 440,
 };
 
+console.log(keyboard.toString());
+updateMonitor();
 function myOnPress(ch, physicalKey){
 	//console.log(ch, physicalKey);
 	const key = keyboard.key(ch);
@@ -77,8 +78,8 @@ function myOnPress(ch, physicalKey){
 	else {
 		//console.log(ch, key);
 	}
-	console.log(keyboard.toString(ch));
-	//updateMonitor();
+	//console.log(keyboard.toString(ch));
+	updateMonitor();
 }
 
 function updateMonitor(){
