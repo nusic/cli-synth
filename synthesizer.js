@@ -1,6 +1,6 @@
 const exec = require('child_process').exec;
 
-function Synthesizer(){
+function Synthesizer(overridingSettings){
 	this.settings = {
 		octave: 0,
 		transposition: 0,
@@ -9,6 +9,10 @@ function Synthesizer(){
 		fadein: 0.03,
 		fadeout: 0.3
 	};
+
+	for(s in overridingSettings){
+		this.settings[s] = overridingSettings[s];
+	}
 
 	this.procs = [];
 	this.lastLatency = 0;

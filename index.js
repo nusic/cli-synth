@@ -5,7 +5,10 @@ var Keyboard = require('./keyboard');
 
 //var keyboard = new Keyboard('q2w3er5t6y7ucfvgbnjmk,l.', 9);
 var keyboard = new Keyboard('awsedftgyhujkolpöä', 9);
-var synth = new Synthesizer();
+var synth = new Synthesizer({
+	fadein: 0.01,
+	duration: 0.35
+});
 synth.on('noteDone', updateMonitor);
 
 process.on('exit', () => {
