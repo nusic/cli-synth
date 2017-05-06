@@ -7,8 +7,7 @@ function Synthesizer(){
 		current_sound: 0,
 		duration: 0.4,
 		fadein: 0.03,
-		fadeout: 0.3,
-		sound: 'tri',
+		fadeout: 0.3
 	};
 
 	this.procs = [];
@@ -17,8 +16,8 @@ function Synthesizer(){
 Synthesizer.prototype.SOUNDS = ['sin', 'tri', 'squ', 'pluck'];
 
 /**
-	Outputs the provided tone as sound with the current synth settings
-	@param tone object with a defined frequency to play
+	Outputs the provided frequency as sound with the current synth settings
+	@param frequency to play
 */
 Synthesizer.prototype.playFrequency = function(frequency) {
 	frequency *= Math.pow(2, this.settings.octave + this.settings.transposition / 12);
@@ -27,6 +26,7 @@ Synthesizer.prototype.playFrequency = function(frequency) {
 	//console.log(playCmd);
 	var subproc = exec(playCmd, (error, stdout, stderr) => {
 	  if (error) {
+	  	console.error(error);
 	    return;
 	  }
 	  if(stdout) console.log(`stdout: ${stdout}`);
@@ -40,12 +40,16 @@ Synthesizer.prototype.destruct = function() {
 };
 
 Synthesizer.prototype.nextSound = function() {
-	var n = Synthesizer.prototype.SOUNDS.length;
-	this.settings.current_sound = (n + this.settings.current_sound + 1) % n;
+	this.settings.current_sound++;
+	this.settings.current_sound %= Synthesizer.prototype.SOUNDS.length;
 }
 
 Synthesizer.prototype.sound = function() {
 	return Synthesizer.prototype.SOUNDS[this.settings.current_sound];
+};
+
+Synthesizer.prototype.toString = function() {
+	return 'sound:'+this.sound() + ' octave:'+this.settings.octave + ' transposition:' + this.settings.transposition
 };
 
 module.exports = Synthesizer;

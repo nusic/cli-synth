@@ -6,7 +6,7 @@ var Keyboard = require('./keyboard');
 
 //var keyboard = new Keyboard('q2w3er5t6y7ucfvgbnjmk,l.', 9);
 var keyboard = new Keyboard('awsedftgyhujkolpöä', 9);
-var synth = new Synthesizer;
+var synth = new Synthesizer();
 
 process.on('exit', () => {
 	synth.destruct();
@@ -34,14 +34,13 @@ process.stdin.resume();
 console.log(keyboard.toString());
 updateMonitor();
 
-var tone = {frequency: 440};
 function myOnPress(ch, physicalKey){
 	//console.log(ch, physicalKey);
 
 	const frequency = keyboard.frequency(ch);
 	if(frequency){
 		synth.playFrequency(frequency);
-		synth.playFrequency(Math.pow(2,7/12)*frequency);
+		//synth.playFrequency(Math.pow(2,7/12)*frequency);
 	}
 	else if(ch === ' '){
 		synth.nextSound();
@@ -65,7 +64,6 @@ function myOnPress(ch, physicalKey){
 function updateMonitor(){
 	process.stdout.clearLine();  // clear current text
 	process.stdout.cursorTo(0);  // move cursor to beginning of line
-	var settings = synth.settings;
-	process.stdout.write('sound:'+synth.sound() + ' octave:'+settings.octave + ' transposition:' + settings.transposition+' ');  // write text
+	process.stdout.write(synth.toString()+' ');  // write text
 }
 

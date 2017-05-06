@@ -2,8 +2,15 @@ const KEY_NAMES = ['A', 'A#', 'B', 'C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G
 const NO_KEY = ' ';
 
 function keyType(semiTonesFromA){
+	// ensure semiTonesFromA is represented in the interval [0, 11]
 	while (semiTonesFromA < 0) semiTonesFromA += 12;
 	while (semiTonesFromA > 11) semiTonesFromA -= 12;
+
+	// ░░   ░   ░   ░░ ░░   ░   ░░ ░░   ░   ░   ░░
+	// ░░   ░   ░   ░░ ░░   ░   ░░ ░░   ░   ░   ░░
+	// ░░   ░   ░ 1 ░░ ░░ 4 ░ 6 ░░ ░░ 9 ░ 11░   ░░
+	// ░░░ ░░░ ░░░ ░░░ ░░░ ░░░ ░░░ ░░░ ░░░ ░░░ ░░░
+	// ░░░ ░░░ ░0░ ░2░ ░3░ ░5░ ░7░ ░8░ ░10 ░░░ ░░░
 	switch(semiTonesFromA){
 		case 0: 
 		case 5: 
@@ -20,9 +27,10 @@ function Keyboard(keyboardChars, locationStandardA){
 	this.keyboardChars = keyboardChars;
 	this.locationStandardA = locationStandardA;
 	this.charToKeyMap = buildKeyFreqMap(keyboardChars, locationStandardA);
+
+	// create a direct mapping from key to frequency
 	var self = this;
-	this.charToFrequency = Object.keys(this.charToKeyMap)
-		.reduce((charToFreq, ch) => {
+	this.charToFrequency = Object.keys(this.charToKeyMap).reduce((charToFreq, ch) => {
 			charToFreq[ch] = self.charToKeyMap[ch].frequency;
 			return charToFreq;
 		}, {});
@@ -101,7 +109,7 @@ function buildKeyFreqMap(keyboard, locationStandardA){
 	}
 	const freqStandardA = 440;
 	return keyboard.split('').reduce((keyMap, key, location) => {
-		if(key === ' ') return keyMap;
+		if(key === NO_KEY) return keyMap;
 		const semiToneDiff = location - locationStandardA;
 		const octaveDiff = semiToneDiff / 12;
 		const freq = freqStandardA * Math.pow(2, octaveDiff);
@@ -114,7 +122,6 @@ function buildKeyFreqMap(keyboard, locationStandardA){
 		return keyMap;
 	}, {});
 }
-
 
 
 module.exports = Keyboard;
