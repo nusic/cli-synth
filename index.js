@@ -41,6 +41,7 @@ function myOnPress(ch, physicalKey){
 	const frequency = keyboard.frequency(ch);
 	if(frequency){
 		synth.playFrequency(frequency);
+		synth.playFrequency(Math.pow(2,7/12)*frequency);
 	}
 	else if(ch === ' '){
 		synth.nextSound();

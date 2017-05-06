@@ -22,9 +22,8 @@ Synthesizer.prototype.SOUNDS = ['sin', 'tri', 'squ', 'pluck'];
 */
 Synthesizer.prototype.playFrequency = function(frequency) {
 	frequency *= Math.pow(2, this.settings.octave + this.settings.transposition / 12);
-	const overtone = Math.pow(2,7/12)*frequency;
 	const sound = Synthesizer.prototype.SOUNDS[this.settings.current_sound];
-	const playCmd = `play -nq synth ${sound} ${frequency} ${sound} ${overtone} fade ${this.settings.fadein} ${this.settings.duration} ${this.settings.fadeout} reverb `;
+	const playCmd = `play -nq synth ${sound} ${frequency} fade ${this.settings.fadein} ${this.settings.duration} ${this.settings.fadeout} reverb `;
 	//console.log(playCmd);
 	var subproc = exec(playCmd, (error, stdout, stderr) => {
 	  if (error) {
