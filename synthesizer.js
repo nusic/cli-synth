@@ -11,9 +11,18 @@ function Synthesizer(){
 	};
 
 	this.procs = [];
+	this.lastLatency = 0;
+	this.events = {
+		noteDone: function(){}
+	};
 }
 
 Synthesizer.prototype.SOUNDS = ['sin', 'tri', 'squ', 'pluck'];
+
+
+Synthesizer.prototype.on = function(eventName, cb) {
+	this.events[eventName] = cb;
+};
 
 /**
 	Outputs the provided frequency as sound with the current synth settings
@@ -24,7 +33,11 @@ Synthesizer.prototype.playFrequency = function(frequency) {
 	const sound = Synthesizer.prototype.SOUNDS[this.settings.current_sound];
 	const playCmd = `play -nq synth ${sound} ${frequency} fade ${this.settings.fadein} ${this.settings.duration} ${this.settings.fadeout} reverb `;
 	//console.log(playCmd);
+	var startTimeMillis = Date.now();
+	var toneDurationMillis = this.settings.duration * 1000;
 	var subproc = exec(playCmd, (error, stdout, stderr) => {
+		this.lastLatency = Date.now() - startTimeMillis - toneDurationMillis;
+		this.events.noteDone();
 	  if (error) {
 	  	console.error(error);
 	    return;
@@ -49,7 +62,7 @@ Synthesizer.prototype.sound = function() {
 };
 
 Synthesizer.prototype.toString = function() {
-	return 'sound:'+this.sound() + ' octave:'+this.settings.octave + ' transposition:' + this.settings.transposition
+	return 'sound:'+this.sound() + ' octave:'+this.settings.octave + ' transposition:' + this.settings.transposition + ' latency:'+this.lastLatency+'ms';
 };
 
 module.exports = Synthesizer;
