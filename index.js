@@ -30,7 +30,7 @@ process.stdin.on('keypress', function (ch, key) {
   	myOnPress(ch, key);
   }
 });
- 
+
 process.stdin.setRawMode(true);
 process.stdin.resume();
 
@@ -40,8 +40,12 @@ updateMonitor();
 function myOnPress(ch, physicalKey){
 	//console.log(ch, physicalKey);
 
-	const frequency = keyboard.frequency(ch);
+	var lowerCh = ch.toLowerCase();
+	var frequency = keyboard.frequency(lowerCh);
 	if(frequency){
+		if(ch !== lowerCh){
+			frequency *= 2;
+		}
 		synth.playFrequency(frequency);
 		//synth.playFrequency(Math.pow(2,7/12)*frequency);
 	}
